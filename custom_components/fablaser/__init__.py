@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any
 
 from aiohttp import web
@@ -12,12 +13,15 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_WEBHOOK_ID
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.dispatcher import async_dispatcher_send
+from homeassistant.util import dt as dt_util
 
 from .const import (
     DOMAIN,
     EVENT_JOB_FINISHED,
     EVENT_JOB_STARTED,
     FINISHED_STATES,
+    MAX_IMAGE_BYTES,
+    SIGNAL_IMAGE,
     SIGNAL_UPDATE,
     STATE_OFFLINE,
     STATE_RUNNING,
@@ -26,7 +30,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = ["sensor", "binary_sensor"]
+PLATFORMS = ["sensor", "binary_sensor", "camera"]
 
 
 @dataclass
@@ -42,6 +46,8 @@ class FabLaserData:
     version: str = ""
     machine: str = ""
     connected: bool = False
+    image: bytes | None = None
+    image_time: datetime | None = None
 
     def update(self, payload: dict[str, Any]) -> None:
         """Applique un message reçu ; les champs absents ne changent pas."""
@@ -84,6 +90,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def _handle(
         hass: HomeAssistant, webhook_id: str, request: web.Request
     ) -> web.Response:
+        if request.content_type == "image/jpeg":
+            # Image de la caméra du plateau : le corps est le JPEG brut
+            image = await request.read()
+            if len(image) > MAX_IMAGE_BYTES or image[:2] != b"\xff\xd8":
+                return web.Response(status=400, text="JPEG de 2 Mo au plus attendu")
+            data.image = image
+            data.image_time = dt_util.utcnow()
+            async_dispatcher_send(hass, SIGNAL_IMAGE.format(entry.entry_id))
+            return web.Response(status=200, text="ok")
         try:
             payload = await request.json()
         except ValueError:
@@ -111,6 +126,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             ):
                 hass.bus.async_fire(EVENT_JOB_FINISHED, {**fields, "result": data.state})
         async_dispatcher_send(hass, SIGNAL_UPDATE.format(entry.entry_id))
+        # La caméra est éteinte ou FabLaser s'est fermé : on n'affiche plus une image périmée
+        if (payload.get("camera") is False or data.state == STATE_OFFLINE) and data.image is not None:
+            data.image = None
+            data.image_time = None
+            async_dispatcher_send(hass, SIGNAL_IMAGE.format(entry.entry_id))
         return web.Response(status=200, text="ok")
 
     webhook.async_register(

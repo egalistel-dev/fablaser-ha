@@ -51,6 +51,11 @@
       "connected": {
         "name": "Machine connected"
       }
+    },
+    "camera": {
+      "camera": {
+        "name": "Worktable"
+      }
     }
   }
 }

@@ -4,7 +4,9 @@
       "user": {
         "title": "FabLaser",
         "description": "Ajoute ton logiciel de gravure FabLaser à Home Assistant.",
-        "data": { "name": "Nom de l'appareil" }
+        "data": {
+          "name": "Nom de l'appareil"
+        }
       },
       "url": {
         "title": "Adresse du webhook",
@@ -26,15 +28,34 @@
           "arret": "Arrêté"
         }
       },
-      "progress": { "name": "Avancement" },
-      "remaining": { "name": "Temps restant" },
-      "duration": { "name": "Durée de la dernière gravure" },
-      "file": { "name": "Fichier" },
-      "error": { "name": "Dernière erreur" }
+      "progress": {
+        "name": "Avancement"
+      },
+      "remaining": {
+        "name": "Temps restant"
+      },
+      "duration": {
+        "name": "Durée de la dernière gravure"
+      },
+      "file": {
+        "name": "Fichier"
+      },
+      "error": {
+        "name": "Dernière erreur"
+      }
     },
     "binary_sensor": {
-      "running": { "name": "Gravure en cours" },
-      "connected": { "name": "Machine connectée" }
+      "running": {
+        "name": "Gravure en cours"
+      },
+      "connected": {
+        "name": "Machine connectée"
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Plateau"
+      }
     }
   }
 }

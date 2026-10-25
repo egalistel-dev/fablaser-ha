@@ -26,3 +26,7 @@ EVENT_JOB_STARTED = f"{DOMAIN}_job_started"
 EVENT_JOB_FINISHED = f"{DOMAIN}_job_finished"
 
 SIGNAL_UPDATE = f"{DOMAIN}_update_{{}}"
+SIGNAL_IMAGE = f"{DOMAIN}_image_{{}}"
+
+# Taille maximale d'une image de la caméra du plateau
+MAX_IMAGE_BYTES = 2 * 1024 * 1024

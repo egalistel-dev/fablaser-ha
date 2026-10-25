@@ -17,6 +17,7 @@ Un appareil **FabLaser** avec ces entités (elles gardent leur dernière valeur 
 | Dernière erreur | Texte de l'erreur de la dernière gravure interrompue |
 | Gravure en cours | Allumé pendant une gravure ou une pause |
 | Machine connectée | Allumé quand FabLaser est connecté à la machine |
+| Plateau (caméra) | Dernière image de la caméra du plateau, si tu actives l'envoi dans FabLaser (voir plus bas) |
 
 « Hors ligne » veut dire que FabLaser est fermé ou que la machine est déconnectée.
 
@@ -34,6 +35,12 @@ Deux événements sont aussi émis, utilisables dans les automatisations :
 5. Dans FabLaser : Préférences > Home Assistant > coche « Activer la liaison », colle l'adresse dans **Adresse du webhook**, puis clique sur « Tester la liaison ».
 
 L'état apparaît dès que tu connectes ta machine dans FabLaser.
+
+## Caméra du plateau (facultatif)
+
+FabLaser peut envoyer l'image de sa caméra USB, celle qui voit le plateau, à Home Assistant. Dans FabLaser : Préférences > Home Assistant, coche « Envoyer l'image de la caméra du plateau à Home Assistant ». Une image part toutes les 4 secondes, seulement quand la caméra est allumée dans FabLaser et que la machine est connectée. L'entité `camera.fablaser_plateau` garde la dernière image, et devient indisponible quand tu éteins la caméra ou fermes FabLaser. L'image n'est jamais enregistrée par l'intégration.
+
+Pour l'afficher sur un tableau de bord : carte « Image » (`picture-entity`) avec l'entité `camera.fablaser_plateau`. Home Assistant rafraîchit une image fixe environ toutes les 10 secondes.
 
 ## Exemple d'automatisation
 
@@ -63,3 +70,5 @@ FabLaser envoie un `POST` JSON à `/api/webhook/<identifiant>` ; les champs abse
 {"state": "gravure", "progress": 42, "remaining_min": 12, "duration_min": null,
  "file": "porte-cle", "error": "", "version": "0.42.0", "machine": "Falcon 2 Pro", "connected": true}
 ```
+
+Un `POST` dont le `Content-Type` est `image/jpeg` envoie à la place une image brute (2 Mo au plus) pour l'entité caméra. `{"camera": false}` efface l'image.
