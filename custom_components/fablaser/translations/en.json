@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "FabLaser",
+        "description": "Add your FabLaser engraving software to Home Assistant.",
+        "data": {
+          "name": "Device name"
+        }
+      },
+      "url": {
+        "title": "Webhook address",
+        "description": "Copy this address into FabLaser: Preferences > Home Assistant > Webhook address.\n\n{url}"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "State",
+        "state": {
+          "hors_ligne": "Offline",
+          "connecte": "Connected",
+          "gravure": "Engraving",
+          "pause": "Paused",
+          "termine": "Finished",
+          "erreur": "Error",
+          "arret": "Stopped"
+        }
+      },
+      "progress": {
+        "name": "Progress"
+      },
+      "remaining": {
+        "name": "Time remaining"
+      },
+      "duration": {
+        "name": "Last job duration"
+      },
+      "file": {
+        "name": "File"
+      },
+      "error": {
+        "name": "Last error"
+      }
+    },
+    "binary_sensor": {
+      "running": {
+        "name": "Engraving"
+      },
+      "connected": {
+        "name": "Machine connected"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "domain": "fablaser",
+  "name": "FabLaser",
+  "codeowners": ["@egalistel-dev"],
+  "config_flow": true,
+  "dependencies": ["webhook"],
+  "documentation": "https://github.com/egalistel-dev/fablaser-ha",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/egalistel-dev/fablaser-ha/issues",
+  "version": "1.0.0"
+}
