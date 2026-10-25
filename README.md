@@ -1,4 +1,4 @@
-# FabLaser pour Home Assistant
+﻿# FabLaser pour Home Assistant
 
 Intégration [HACS](https://hacs.xyz) qui relie le logiciel de gravure **FabLaser** à Home Assistant.
 FabLaser envoie son état à un webhook de Home Assistant : aucun port à ouvrir sur le PC de gravure, aucun jeton à stocker.
@@ -27,7 +27,7 @@ Deux événements sont aussi émis, utilisables dans les automatisations :
 
 ## Installation
 
-1. HACS > Intégrations > menu ⋮ > Dépôts personnalisés : ajoute l'adresse de ce dépôt, catégorie *Intégration*, puis installe **FabLaser**.
+1. HACS > Intégrations > menu ⋮ > Dépôts personnalisés : ajoute l'adresse `https://github.com/egalistel-dev/fablaser-ha`, catégorie *Intégration*, puis installe **FabLaser**.
 2. Redémarre Home Assistant.
 3. Paramètres > Appareils et services > Ajouter une intégration > **FabLaser**. Donne un nom à l'appareil.
 4. L'assistant affiche l'adresse du webhook. Copie-la.
